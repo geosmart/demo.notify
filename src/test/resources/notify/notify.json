@@ -4,7 +4,7 @@
     "no_product": "F2001001",
     "result_auth": "T",
     "sign_field": "oid_partner|user_id|result_auth|id_no|id_name",
-    "sign": "E12F0E7D4CF4D219EF6A979E7C5DEECD",
+    "sign": "F7B1A2815FE7E9D2389F736BF423DA40",
     "be_idcard": "0.41",
     "fail_reason": "对比度过低",
     "id_no": " 371121198304272602 ",

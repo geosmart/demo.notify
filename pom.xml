@@ -5,7 +5,7 @@
     <artifactId>demo.notify</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>异步通知接收示例</name>
+    <name>demo.notify</name>
 
     <properties>
         <!-- 源文件字符编码 -->

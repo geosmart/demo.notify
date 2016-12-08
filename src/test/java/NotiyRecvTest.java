@@ -37,7 +37,7 @@ public class NotiyRecvTest {
     }
 
     @Test
-    public void process() throws java.io.IOException {
+    public void test_notify() throws java.io.IOException {
         CloseableHttpClient client = HttpClients.createDefault();
 
         //设置传入参数
