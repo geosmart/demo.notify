@@ -32,7 +32,7 @@ public class RESTFulServlet extends javax.servlet.http.HttpServlet implements ja
         String pathId = getID(request);
         System.out.println("received id = " + pathId);
         if ("notify".equals(pathId)) {
-            NotifyResultProcessor.process(request, response);
+            new NotifyResultProcessor().process(request, response);
         }
     }
 

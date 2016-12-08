@@ -30,7 +30,7 @@ public class NotifyResultProcessor {
     /**
      * 接收实名认证异步通知
      */
-    public static void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JSONObject reqObject = getRequestJson(request);
 
         JSONObject respJson = new JSONObject();
@@ -56,29 +56,13 @@ public class NotifyResultProcessor {
         response.getOutputStream().write(respJson.toJSONString().getBytes(CHARSET_UTF_8));
     }
 
-    private static JSONObject getRequestJson(HttpServletRequest request) throws IOException {
-        InputStream in = request.getInputStream();
-        byte[] b = new byte[10240];
-        int len;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while ((len = in.read(b)) > 0) {
-            baos.write(b, 0, len);
-        }
-        String bodyText = new String(baos.toByteArray(), CHARSET_UTF_8);
-        JSONObject json = (JSONObject) JSONObject.parse(bodyText);
-        if (IS_DEBUG) {
-            System.out.println("received notify message:");
-            System.out.println(JSON.toJSONString(json, true));
-        }
-        return json;
-    }
 
     /**
      * 根据sign_field签名域和对应的字段值生成MD5签名
      *
      * @param reqObject 请求对象
      */
-    private static String getSignMD5(JSONObject reqObject) throws UnsupportedEncodingException {
+    private String getSignMD5(JSONObject reqObject) throws UnsupportedEncodingException {
         String[] signFields = reqObject.getString("sign_field").split("\\|");
         java.util.List<String> signKeyValues = new java.util.ArrayList<String>(signFields.length + 1);
         for (String signField : signFields) {
@@ -93,5 +77,25 @@ public class NotifyResultProcessor {
         }
         System.out.println("signField：" + signStr + PUB_KEY);
         return MD5Utils.MD5Encrpytion((signStr + PUB_KEY).getBytes(CHARSET_UTF_8));
+    }
+
+    /**
+     * 获取请求json对象
+     */
+    private JSONObject getRequestJson(HttpServletRequest request) throws IOException {
+        InputStream in = request.getInputStream();
+        byte[] b = new byte[10240];
+        int len;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        while ((len = in.read(b)) > 0) {
+            baos.write(b, 0, len);
+        }
+        String bodyText = new String(baos.toByteArray(), CHARSET_UTF_8);
+        JSONObject json = (JSONObject) JSONObject.parse(bodyText);
+        if (IS_DEBUG) {
+            System.out.println("received notify message:");
+            System.out.println(JSON.toJSONString(json, true));
+        }
+        return json;
     }
 }
