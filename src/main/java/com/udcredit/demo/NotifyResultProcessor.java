@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class NotifyResultProcessor {
     /**
-     * TODO 获取商户开户的pubkey
+     * TODO 获取商户开户的SecurityKey
      */
-    static final String PUB_KEY = "";
+    static final String SECURITY_KEY = "";
     static final String CHARSET_UTF_8 = "UTF-8";
     static final boolean IS_DEBUG = true;
 
@@ -75,8 +75,8 @@ public class NotifyResultProcessor {
                 signStr += "|";
             }
         }
-        System.out.println("signField：" + signStr + PUB_KEY);
-        return MD5Utils.MD5Encrpytion((signStr + PUB_KEY).getBytes(CHARSET_UTF_8));
+        System.out.println("signField：" + signStr + SECURITY_KEY);
+        return MD5Utils.MD5Encrpytion((signStr + SECURITY_KEY).getBytes(CHARSET_UTF_8));
     }
 
     /**

@@ -21,7 +21,7 @@ import java.io.IOException;
  * @date 2016-10-05
  */
 public class NotiyRecvTest {
-    static final String url = "http://localhost:9090/demo/notify";
+    static final String url = "http://localhost:7070/demo/notify";
     static final String CHASET_UTF_8 = "UTF-8";
 
     //测试异步通知json字符串
