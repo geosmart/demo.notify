@@ -13,26 +13,6 @@
  */
 public class NotifyResultProcessor {
     /**
-     * TODO 获取商户开户的pubkey
-     */
-    static final String PUB_KEY = "";
-    static final String CHARSET_UTF_8 = "UTF-8";
-    static final boolean IS_DEBUG = true;
-
-    /**
-     * 接收实名认证异步通知
-     */
-    public static void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        JSONObject reqObject = getRequestJson(request);
-
-/**
- * 异步通知结果接收接口
- *
- * @author geosmart
- * @date 2016-10-05
- */
-public class NotifyResultProcessor {
-    /**
      * TODO 获取商户开户的SecurityKey
      */
     static final String SECURITY_KEY = "";
