@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * REST服务入口
  *
  * @author geosmart
- * @date 2016-10-05
+ * @date 2017-01-06
  */
 public class RESTFulServlet extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 

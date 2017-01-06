@@ -18,7 +18,7 @@ import java.io.IOException;
  * 测试异步通知接收接口
  *
  * @author geosmart
- * @date 2016-10-05
+ * @date 2017-01-06
  */
 public class NotiyRecvTest {
     static final String url = "http://localhost:7070/demo/notify";

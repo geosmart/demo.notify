@@ -17,15 +17,34 @@ import javax.servlet.http.HttpServletResponse;
  * 异步通知结果接收接口
  *
  * @author geosmart
- * @date 2016-10-05
+ * @date 2017-01-06
  */
 public class NotifyResultProcessor {
     /**
-     * TODO 获取商户开户的SecurityKey
+     * TODO 获取商户开户的pub_key
      */
-    static final String SECURITY_KEY = "";
+    static final String PUB_KEY = "3d0fcd26-bb37-49e8-84bd-e5ecdd8ba9cf";
+    /**
+     * TODO 获取商户开户的security_key
+     */
+    static final String SECURITY_KEY = "cab06b8b-cb25-4074-b90c-32ffd478cc70";
+
     static final String CHARSET_UTF_8 = "UTF-8";
     static final boolean IS_DEBUG = true;
+
+    /**
+     * 生成MD5签名
+     *
+     * @param pub_key          商户公钥
+     * @param partner_order_id 商户订单号
+     * @param sign_time        签名时间
+     * @param security_key     商户私钥
+     */
+    public static String getMD5Sign(String pub_key, String partner_order_id, String sign_time, String security_key) throws UnsupportedEncodingException {
+        String signStr = String.format("pub_key=%s|partner_order_id=%s|sign_time=%s|security_key=%s", pub_key, partner_order_id, sign_time, security_key);
+        System.out.println("signField：" + signStr + SECURITY_KEY);
+        return MD5Utils.MD5Encrpytion(signStr.getBytes("UTF-8"));
+    }
 
     /**
      * 接收实名认证异步通知
@@ -36,8 +55,10 @@ public class NotifyResultProcessor {
         JSONObject respJson = new JSONObject();
         //验签
         String sign = reqObject.getString("sign");
+        String sign_time = reqObject.getString("sign_time");
+        String partner_order_id = reqObject.getString("partner_order_id");
         System.out.println("sign：" + sign);
-        String signMD5 = getSignMD5(reqObject);
+        String signMD5 = getMD5Sign(PUB_KEY, partner_order_id, sign_time, SECURITY_KEY);
         System.out.println("signMD5：" + signMD5);
         if (!sign.equals(signMD5)) {
             System.err.println("异步通知签名错误");
@@ -54,29 +75,6 @@ public class NotifyResultProcessor {
         response.setCharacterEncoding(CHARSET_UTF_8);
         response.setContentType("application/json; charset=utf-8");
         response.getOutputStream().write(respJson.toJSONString().getBytes(CHARSET_UTF_8));
-    }
-
-
-    /**
-     * 根据sign_field签名域和对应的字段值生成MD5签名
-     *
-     * @param reqObject 请求对象
-     */
-    private String getSignMD5(JSONObject reqObject) throws UnsupportedEncodingException {
-        String[] signFields = reqObject.getString("sign_field").split("\\|");
-        java.util.List<String> signKeyValues = new java.util.ArrayList<String>(signFields.length + 1);
-        for (String signField : signFields) {
-            signKeyValues.add(signField + "=" + reqObject.getString(signField));
-        }
-        String signStr = "";
-        for (int i = 0; i < signKeyValues.size(); i++) {
-            signStr = signStr + signKeyValues.get(i);
-            if (i != signKeyValues.size() - 1) {
-                signStr += "|";
-            }
-        }
-        System.out.println("signField：" + signStr + SECURITY_KEY);
-        return MD5Utils.MD5Encrpytion((signStr + SECURITY_KEY).getBytes(CHARSET_UTF_8));
     }
 
     /**
