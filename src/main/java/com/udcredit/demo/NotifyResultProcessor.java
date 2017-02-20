@@ -66,11 +66,25 @@ public class NotifyResultProcessor {
             respJson.put("message", "签名错误");
         } else {
             System.out.print("收到商户异步通知");
-            //TODO 商户业务逻辑：处理数据内容
             respJson.put("code", "1");
             respJson.put("message", "收到通知");
+            //TODO 异步执行商户自己的业务逻辑(以免阻塞返回导致通知多次)
+            Thread asyncThread = new Thread("asyncDataHandlerThread") {
+                public void run() {
+                    System.out.println("异步执行商户自己的业务逻辑...");
+                    try {
+                        String id_name = reqObject.getString("id_name");
+                        String id_number = reqObject.getString("id_number");
+                        System.out.println(id_name + "：" + id_number);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            asyncThread.start();
         }
 
+        System.out.println("返回结果：" + respJson.toJSONString());
         //返回结果
         response.setCharacterEncoding(CHARSET_UTF_8);
         response.setContentType("application/json; charset=utf-8");
