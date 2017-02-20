@@ -18,36 +18,50 @@ public class NotifyResultProcessor {
     static final String PUB_KEY = "";
     static final String CHARSET_UTF_8 = "UTF-8";
     static final boolean IS_DEBUG = true;
-
-    /**
+ /**
      * 接收实名认证异步通知
      */
-    public static void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JSONObject reqObject = getRequestJson(request);
 
         JSONObject respJson = new JSONObject();
         //验签
         String sign = reqObject.getString("sign");
-        System.out.println("sign：" + sign);
         String signMD5 = getSignMD5(reqObject);
-        System.out.println("signMD5：" + signMD5);
+        System.err.println("signMD5：" + signMD5);
         if (!sign.equals(signMD5)) {
             System.err.println("异步通知签名错误");
             respJson.put("code", "0");
             respJson.put("message", "签名错误");
         } else {
             System.out.print("收到商户异步通知");
-            //TODO 商户业务逻辑：处理数据内容
             respJson.put("code", "1");
             respJson.put("message", "收到通知");
+
+            //TODO 异步执行商户自己的业务逻辑(以免阻塞返回导致通知多次)
+            Thread asyncThread = new Thread("asyncDataHandlerThread") {
+                public void run() {
+                    System.out.println("异步执行商户自己的业务逻辑...");
+                    try {
+                        String id_name = reqObject.getString("id_name");
+                        String id_number = reqObject.getString("id_no");
+                        System.out.println(id_name + "：" + id_number);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            asyncThread.start();
         }
+
+        System.out.println("返回结果：" + respJson.toJSONString());
 
         //返回结果
         response.setCharacterEncoding(CHARSET_UTF_8);
         response.setContentType("application/json; charset=utf-8");
         response.getOutputStream().write(respJson.toJSONString().getBytes(CHARSET_UTF_8));
     }
-
+    
     private static JSONObject getRequestJson(HttpServletRequest request) throws IOException {
         InputStream in = request.getInputStream();
         byte[] b = new byte[10240];
