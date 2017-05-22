@@ -14,7 +14,7 @@ public class MD5Utils {
 
     public static final String MD5Encrpytion(String source) {
         try {
-            byte[] strTemp = source.getBytes(Charset.forName("UTF-8"));
+            byte[] strTemp =source.getBytes(Charset.forName("UTF-8"));
             MessageDigest mdTemp = MessageDigest.getInstance("MD5");
             mdTemp.update(strTemp);
             byte[] md = mdTemp.digest();
