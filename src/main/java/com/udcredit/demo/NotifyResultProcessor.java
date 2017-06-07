@@ -50,13 +50,16 @@ public class NotifyResultProcessor {
      * 接收实名认证异步通知
      */
     public void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        final JSONObject reqObject = getRequestJson(request);
+        System.out.println("收到通知");
+        final JSONObject reqJson = getRequestJson(request);
+        //通用请求时间
+        JSONObject header = reqJson.getJSONObject("header");
+        String sign_time = header.getString("sign_time");
 
         JSONObject respJson = new JSONObject();
         //验签
-        String sign = reqObject.getString("sign");
-        String sign_time = reqObject.getString("sign_time");
-        String partner_order_id = reqObject.getString("partner_order_id");
+        String sign = header.getString("sign");
+        String partner_order_id = header.getString("partner_order_id");
         System.out.println("sign：" + sign);
         String signMD5 = getMD5Sign(PUB_KEY, partner_order_id, sign_time, SECURITY_KEY);
         System.out.println("signMD5：" + signMD5);
@@ -65,17 +68,15 @@ public class NotifyResultProcessor {
             respJson.put("code", "0");
             respJson.put("message", "签名错误");
         } else {
-            System.out.print("收到商户异步通知");
             respJson.put("code", "1");
             respJson.put("message", "收到通知");
-            //TODO 异步执行商户自己的业务逻辑(以免阻塞返回导致通知多次)
-            Thread asyncThread = new Thread("asyncDataHandlerThread") {
+            //TODO 异步执行商户自己的业务逻辑(以免阻塞接口返回，导致通知多次)
+            Thread asyncThread = new Thread("asyncThread") {
                 public void run() {
                     System.out.println("异步执行商户自己的业务逻辑...");
                     try {
-                        String id_name = reqObject.getString("id_name");
-                        String id_number = reqObject.getString("id_number");
-                        System.out.println(id_name + "：" + id_number);
+                        JSONObject body = reqJson.getJSONObject("body");
+                        System.out.println(body.toJSONString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -83,7 +84,6 @@ public class NotifyResultProcessor {
             };
             asyncThread.start();
         }
-
         System.out.println("返回结果：" + respJson.toJSONString());
         //返回结果
         response.setCharacterEncoding(CHARSET_UTF_8);

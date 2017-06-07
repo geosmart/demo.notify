@@ -21,7 +21,7 @@ import java.io.IOException;
  * @date 2017-01-06
  */
 public class NotiyRecvTest {
-    static final String url = "http://localhost:7070/demo/notify";
+    static final String NOTIFY_URL = "http://localhost:6060/demo/notify";
     static final String CHASET_UTF_8 = "UTF-8";
 
     //测试异步通知json字符串
@@ -39,12 +39,11 @@ public class NotiyRecvTest {
     @Test
     public void test_notify() throws java.io.IOException {
         CloseableHttpClient client = HttpClients.createDefault();
-
         //设置传入参数
         StringEntity entity = new StringEntity(requestJson, CHASET_UTF_8);
-        entity.setContentEncoding("UTF-8");
+        entity.setContentEncoding(CHASET_UTF_8);
         entity.setContentType("application/json");
-        HttpPost httpPost = new HttpPost(url);
+        HttpPost httpPost = new HttpPost(NOTIFY_URL);
         httpPost.setEntity(entity);
 
         //调用异步通知接收接口

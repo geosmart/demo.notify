@@ -17,3 +17,4 @@
 .idea/vcs.xml
 .idea/workspace.xml
 demo.notify.iml
+.idea/kotlinc.xml
