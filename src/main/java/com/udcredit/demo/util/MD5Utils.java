@@ -14,7 +14,7 @@ public class MD5Utils {
 
     public static final String MD5Encrpytion(String source) {
         try {
-            byte[] strTemp =source.getBytes(Charset.forName("UTF-8"));
+            byte[] strTemp = source.getBytes(Charset.forName("UTF-8"));
             MessageDigest mdTemp = MessageDigest.getInstance("MD5");
             mdTemp.update(strTemp);
             byte[] md = mdTemp.digest();
@@ -31,8 +31,6 @@ public class MD5Utils {
                     str[m] = (char) (str[m] - ' ');
                 }
             }
-            //System.out.println("[MD5Utils] [source String]" + source);
-            //System.out.println("[MD5Utils] [MD5    String]" + new String(str));
             return new String(str);
         } catch (Exception e) {
         }
@@ -57,8 +55,6 @@ public class MD5Utils {
                     str[m] = (char) (str[m] - ' ');
                 }
             }
-            //System.out.println("[MD5Utils] [source String]" + source);
-            //System.out.println("[MD5Utils] [MD5    String]" + new String(str));
             return new String(str);
         } catch (Exception e) {
         }
