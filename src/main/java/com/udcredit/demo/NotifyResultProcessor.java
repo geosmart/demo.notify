@@ -50,7 +50,7 @@ public class NotifyResultProcessor {
      * 接收实名认证异步通知
      */
     public void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        JSONObject reqObject = getRequestJson(request);
+        final JSONObject reqObject = getRequestJson(request);
 
         JSONObject respJson = new JSONObject();
         //验签
