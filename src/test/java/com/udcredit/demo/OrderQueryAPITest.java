@@ -25,7 +25,7 @@ public class OrderQueryAPITest {
     final static String pub_key = "4ad2c7c4-f9fa-456b-92cd-056d5e5bcd59";
 
     //订单查询接口地址
-    static final String Order_Query = "http://10.1.30.51:8000/idsafe-front/frontserver/4.2/api/order_query/pub_key/" + pub_key;
+    static final String Order_Query = "http://10.10.0.230:8080/idsafe-front/front/4.3/api/order_query/pub_key/" + pub_key;
 
     //商户私钥
     final static String security_key = "2e6b6da8-77b9-4268-a8ba-8ff47ca7e6b6";
@@ -44,23 +44,30 @@ public class OrderQueryAPITest {
 
     @Test
     public void OrderQueryTest() throws Exception {
-        OrderQueryTest("O_20170517130503");
+        orderQuery("194339067293335552");
     }
 
-    JSONObject OrderQueryTest(String partner_order_id) throws Exception {
-        JSONObject renJson = new JSONObject();
+
+    /**
+     * 订单查询
+     *
+     * @param partner_order_id 商户唯一订单号
+     */
+    private JSONObject orderQuery(String partner_order_id) throws Exception {
+        JSONObject reqJson = new JSONObject();
+        JSONObject header = new JSONObject();
         String sign_time = TestCaseUtil.getStringDate(new Date());
         String sign = getMD5Sign(pub_key, partner_order_id, sign_time, security_key);
         System.out.println(sign);
-        renJson.put("partner_order_id", partner_order_id);
-        renJson.put("sign", sign);
-        renJson.put("sign_time", sign_time);
+        header.put("partner_order_id", partner_order_id);
+        header.put("sign", sign);
+        header.put("sign_time", sign_time);
+        reqJson.put("header", header);
+        System.out.println("订单查询接口-输入参数：" + JSON.toJSONString(reqJson, true));
 
-        System.out.println("查询接口参数：" + JSON.toJSONString(renJson, true));
-
-        JSONObject order_query = TestCaseUtil.doHttpRequest(Order_Query, renJson);
-        System.out.println("查询接口查询结果：" + JSON.toJSONString(order_query, true));
-        return order_query;
+        JSONObject resJson = TestCaseUtil.doHttpRequest(Order_Query, reqJson);
+        System.out.println("订单查询接口-输出结果：" + JSON.toJSONString(resJson, true));
+        return resJson;
     }
 
     @After
