@@ -4,6 +4,7 @@
 # 异步通知接收代码片段
 
 ``` java 
+
     /**
      * 接收实名认证异步通知
      */
@@ -34,6 +35,30 @@
                     System.out.println("异步执行商户自己的业务逻辑...");
                     try {
                         JSONObject body = reqJson.getJSONObject("body");
+                        if (body.containsKey("product_code")) {
+                            EnumProductCode enumProductCode = EnumProductCode.newInstance(body.getString("product_code"));
+                            switch (enumProductCode) {//按产品接收结果数据
+                                case OCR_FRONT:
+                                    //证面OCR
+                                    break;
+                                case OCR_BACK:
+                                    //反面OCR
+                                    break;
+                                case VERIFY_SIMPLE:
+                                case VERIFY_RETURN_PHOTO:
+                                    //实名验证
+                                    break;
+                                case LIVING_DETECT:
+                                    //活体检测
+                                    break;
+                                case FACE_COMPARE:
+                                    //人脸比对
+                                    break;
+                                case VIDEO_AUTH:
+                                    //视频存证
+                                    break;
+                            }
+                        }
                         System.out.println(body.toJSONString());
                     } catch (Exception e) {
                         e.printStackTrace();

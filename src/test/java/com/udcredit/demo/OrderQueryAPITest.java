@@ -30,7 +30,6 @@ public class OrderQueryAPITest {
     //商户私钥
     final static String security_key = "2e6b6da8-77b9-4268-a8ba-8ff47ca7e6b6";
 
-
     public static String getMD5Sign(String pub_key, String partner_order_id, String sign_time, String security_key) throws UnsupportedEncodingException {
         String signStr = String.format("pub_key=%s|partner_order_id=%s|sign_time=%s|security_key=%s", pub_key, partner_order_id, sign_time, security_key);
         System.out.println("测试输入签名signField：" + signStr);
