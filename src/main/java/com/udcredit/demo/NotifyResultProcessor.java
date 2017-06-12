@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * 异步通知结果接收接口
+ * 云慧眼认证结果数据接收接口
  *
  * @author geosmart
- * @date 2017-01-06
+ * @date 2017-06-12
  */
 public class NotifyResultProcessor {
     /**
@@ -47,7 +47,7 @@ public class NotifyResultProcessor {
     }
 
     /**
-     * 接收实名认证异步通知
+     * 接收云慧眼认证结果
      */
     public void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println("收到通知");
@@ -80,10 +80,10 @@ public class NotifyResultProcessor {
                             EnumProductCode enumProductCode = EnumProductCode.newInstance(body.getString("product_code"));
                             switch (enumProductCode) {//按产品接收结果数据
                                 case OCR_FRONT:
-                                    //证面OCR
+                                    //身份证正面OCR
                                     break;
                                 case OCR_BACK:
-                                    //反面OCR
+                                    //身份证反面OCR
                                     break;
                                 case VERIFY_SIMPLE:
                                 case VERIFY_RETURN_PHOTO:
